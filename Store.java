@@ -505,11 +505,11 @@ public class Store {
 				String name = txtRemoveFManageInvRemove.getText();
 				try {
 					inventory.removeItem(name);
+					JOptionPane.showMessageDialog(frame, "Successfully Removed!");
+					FileHandling.saveInventory(inventory);
 				} catch (ItemNotFoundException eee) {
-					System.out.println(eee.getMessage());
+					JOptionPane.showMessageDialog(frame, "There is no item to remove");
 				}
-				FileHandling.saveInventory(inventory);
-				JOptionPane.showMessageDialog(frame, "Successfully Removed!");
 				frame.setVisible(false);
 				FManageInvMain();
 			}
@@ -630,7 +630,7 @@ public class Store {
 		contentPaneFManageInvAdd_NonFood.add(lblNewLabel_1_1);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("Enter The Category:");
-		lblNewLabel_1_1_1.setBounds(76, 129, 111, 26);
+		lblNewLabel_1_1_1.setBounds(76, 129, 131, 26);
 		contentPaneFManageInvAdd_NonFood.add(lblNewLabel_1_1_1);
 
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("Enter The Warranty Period :");
@@ -665,14 +665,23 @@ public class Store {
 		btnNewButton.setBounds(152, 216, 89, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String itemName = textFieldFManageInvAdd_NonFood.getText();
-				double itemPrice = Double.valueOf(textField_1FManageInvAdd_NonFood.getText());
-				String itemCategory = textField_2FManageInvAdd_NonFood.getText();
-				int nonFoodWarranty = Integer.valueOf(txtWarrantyPeriodInFManageInvAdd_NonFood.getText());
+				String itemName = null;
+				double itemPrice = 0;
+				String itemCategory = null;
+				int nonFoodWarranty = 0;
+				try {
+					itemName = textFieldFManageInvAdd_NonFood.getText();
+					itemPrice = Double.valueOf(textField_1FManageInvAdd_NonFood.getText());
+					itemCategory = textField_2FManageInvAdd_NonFood.getText();
+					nonFoodWarranty = Integer.valueOf(txtWarrantyPeriodInFManageInvAdd_NonFood.getText());
+				} catch (NumberFormatException I) {
+					JOptionPane.showMessageDialog(frame, "Wrong inputs");
+				}
 				if (inventory.spaceAvailable()) {
 					if (itemPrice > 0) {
 						if (nonFoodWarranty > 0) {
-							Product item = new Food(itemName, itemPrice, itemCategory, nonFoodWarranty);
+							Product item;
+							item = new Food(itemName, itemPrice, itemCategory, nonFoodWarranty);
 							JOptionPane.showMessageDialog(frame, "Successfully Added!");
 							frame.setVisible(false);
 							FManageInvMain();
@@ -742,11 +751,11 @@ public class Store {
 		contentPaneFManageInvAdd_Food.add(lblNewLabel_1_1);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("Enter The Category:");
-		lblNewLabel_1_1_1.setBounds(117, 134, 101, 26);
+		lblNewLabel_1_1_1.setBounds(117, 134, 111, 26);
 		contentPaneFManageInvAdd_Food.add(lblNewLabel_1_1_1);
 
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("Enter The Calories:");
-		lblNewLabel_1_1_1_1.setBounds(117, 171, 101, 26);
+		lblNewLabel_1_1_1_1.setBounds(117, 171, 111, 26);
 		contentPaneFManageInvAdd_Food.add(lblNewLabel_1_1_1_1);
 
 		txtNameFManageInvAdd_Food = new JTextField();
@@ -773,10 +782,18 @@ public class Store {
 		contentPaneFManageInvAdd_Food.add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String itemName = txtNameFManageInvAdd_Food.getText();
-				double itemPrice = Double.valueOf(txtPriceFManageInvAdd_Food.getText());
-				String itemCategory = txtCategoryFManageInvAdd_Food.getText();
-				int foodCalories = Integer.valueOf(txtCaloriesFManageInvAdd_Food.getText());
+				String itemName = null;
+				double itemPrice = 0;
+				String itemCategory = null;
+				int foodCalories = 0;
+				try {
+					itemName = txtNameFManageInvAdd_Food.getText();
+					itemPrice = Double.valueOf(txtPriceFManageInvAdd_Food.getText());
+					itemCategory = txtCategoryFManageInvAdd_Food.getText();
+					foodCalories = Integer.valueOf(txtCaloriesFManageInvAdd_Food.getText());
+				} catch (NumberFormatException I) {
+					JOptionPane.showMessageDialog(frame, "Wrong Inputs");
+				}
 				if (inventory.spaceAvailable()) {
 					if (itemPrice > 0) {
 						if (foodCalories > 0) {
@@ -837,7 +854,7 @@ public class Store {
 
 		JLabel lblNewLabel_1 = new JLabel("Is it food or nonfood:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_1.setBounds(136, 50, 117, 14);
+		lblNewLabel_1.setBounds(136, 50, 137, 14);
 		contentPaneFManageInvAdd_Choose.add(lblNewLabel_1);
 
 		JButton btnNewButton = new JButton("Food");
@@ -902,7 +919,7 @@ public class Store {
 			}
 		});
 		btnCustomerInformation.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnCustomerInformation.setBounds(10, 108, 159, 60);
+		btnCustomerInformation.setBounds(8, 108, 162, 60);
 		contentPaneFMainFrame.add(btnCustomerInformation);
 
 		JButton btnManageInventory = new JButton("Manage Inventory");
@@ -913,11 +930,11 @@ public class Store {
 				FManageInvMain();
 			}
 		});
-		btnManageInventory.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btnManageInventory.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnManageInventory.setBounds(179, 108, 146, 60);
 		contentPaneFMainFrame.add(btnManageInventory);
 
-		JButton btnCustomerShoppingCarts = new JButton("Customer Shopping Carts");
+		JButton btnCustomerShoppingCarts = new JButton("Customer Carts");
 		btnCustomerShoppingCarts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -925,8 +942,9 @@ public class Store {
 				FCustomerShopping_SelectCustomer();
 			}
 		});
-		btnCustomerShoppingCarts.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnCustomerShoppingCarts.setBounds(335, 108, 155, 60);
+		btnCustomerShoppingCarts.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnCustomerShoppingCarts.setHorizontalAlignment(SwingConstants.CENTER);
+		btnCustomerShoppingCarts.setBounds(335, 108, 146, 60);
 		contentPaneFMainFrame.add(btnCustomerShoppingCarts);
 
 		frame.setVisible(true);
@@ -965,8 +983,13 @@ public class Store {
 		btnNewButton.setBounds(146, 98, 95, 28);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String productName = textFieldFCustomerShopping_SelectItemRemove.getText();
+				String productName = null;
 				int index = -99;
+				try {
+					productName = textFieldFCustomerShopping_SelectItemRemove.getText();
+				} catch (NumberFormatException I) {
+					JOptionPane.showMessageDialog(frame, "Wrong inputs");
+				}
 				try {
 					index = shoppingCart.findItem(productName);
 				} catch (ItemNotFoundException eas) {
@@ -1028,7 +1051,12 @@ public class Store {
 			public void actionPerformed(ActionEvent e) {
 				int index = -1;
 
-				String productName = textFieldFCustomerShopping_SelectItemAdd.getText();
+				String productName = null;
+				try {
+					productName = textFieldFCustomerShopping_SelectItemAdd.getText();
+				} catch (NumberFormatException I) {
+					JOptionPane.showMessageDialog(frame, "Wrong inputs");
+				}
 				try {
 					index = inventory.findItem(productName);
 				} catch (ItemNotFoundException ae) {
@@ -1093,8 +1121,12 @@ public class Store {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				String customerNameFCustomerShopping_SelectCustomer = textFieldFCustomerShopping_SelectCustomer
-						.getText();
+				String customerNameFCustomerShopping_SelectCustomer = null;
+				try {
+					customerNameFCustomerShopping_SelectCustomer = textFieldFCustomerShopping_SelectCustomer.getText();
+				} catch (NumberFormatException I) {
+					JOptionPane.showMessageDialog(frame, "Wrong inputs");
+				}
 
 				int index = findCustomer(customerNameFCustomerShopping_SelectCustomer);
 
@@ -1153,8 +1185,14 @@ public class Store {
 		btnNewButton.setBounds(151, 97, 95, 28);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int quantityToRemove = Integer.valueOf(textFieldFCustomerShopping_HowManyRemove.getText());
-				int availableQuantity = shoppingCart.countItem(productNameFoundRemove);
+				int quantityToRemove = 0;
+				int availableQuantity = 0;
+				try {
+					quantityToRemove = Integer.valueOf(textFieldFCustomerShopping_HowManyRemove.getText());
+					availableQuantity = shoppingCart.countItem(productNameFoundRemove);
+				} catch (NumberFormatException I) {
+					JOptionPane.showMessageDialog(frame, "Wrong inputs");
+				}
 				if (quantityToRemove < 0) {
 					JOptionPane.showMessageDialog(frame, "Wrong inputs");
 				} else {
@@ -1221,7 +1259,12 @@ public class Store {
 		btnNewButton.setBounds(151, 97, 95, 28);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int quantityToAdd = Integer.valueOf(textFieldFCustomerShopping_HowManyAdd.getText());
+				int quantityToAdd = 0;
+				try {
+					quantityToAdd = Integer.valueOf(textFieldFCustomerShopping_HowManyAdd.getText());
+				} catch (NumberFormatException I) {
+					JOptionPane.showMessageDialog(frame, "Wrong inputs");
+				}
 				if (quantityToAdd < 0) {
 					JOptionPane.showMessageDialog(frame, "Wrong inputs");
 				} else {
@@ -1418,7 +1461,12 @@ public class Store {
 		btnNewButton.setBounds(136, 83, 121, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String customerName = textFieldFCustomerInfo_Remove.getText();
+				String customerName = null;
+				try {
+					customerName = textFieldFCustomerInfo_Remove.getText();
+				} catch (NumberFormatException I) {
+					JOptionPane.showMessageDialog(frame, "Wrong inputs");
+				}
 				int index;
 				index = findCustomer(customerName);
 
@@ -1536,12 +1584,12 @@ public class Store {
 		frame.setContentPane(contentPaneFCustomerInfo_Add);
 		contentPaneFCustomerInfo_Add.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("Enter The Name");
-		lblNewLabel.setBounds(170, 11, 77, 14);
+		JLabel lblNewLabel = new JLabel("Enter The Name:");
+		lblNewLabel.setBounds(170, 11, 127, 14);
 		contentPaneFCustomerInfo_Add.add(lblNewLabel);
 
-		JLabel lblEnterTheAdress = new JLabel("Enter The Address");
-		lblEnterTheAdress.setBounds(170, 103, 97, 14);
+		JLabel lblEnterTheAdress = new JLabel("Enter The Address:");
+		lblEnterTheAdress.setBounds(170, 103, 127, 14);
 		contentPaneFCustomerInfo_Add.add(lblEnterTheAdress);
 
 		textFieldFCustomerInfo_Add = new JTextField();
@@ -1576,10 +1624,15 @@ public class Store {
 			public void actionPerformed(ActionEvent e) {
 				if (customerCount < customerList.length) {
 
-					String customerName = textFieldFCustomerInfo_Add.getText();
+					String customerName = null;
 
-					String customerAddress = textField_1FCustomerInfo_Add.getText();
-
+					String customerAddress = null;
+					try {
+						customerName = textFieldFCustomerInfo_Add.getText();
+						customerAddress = textField_1FCustomerInfo_Add.getText();
+					} catch (NumberFormatException I) {
+						JOptionPane.showMessageDialog(frame, "Wrong inputs");
+					}
 					customerList[customerCount] = new Customer(customerName, customerAddress);
 					customerCount++;
 					JOptionPane.showMessageDialog(frame, "Customer Added!");
